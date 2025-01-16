@@ -1,9 +1,32 @@
-import { Container, Paper, TextField, Button, Box } from "@mui/material";
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { login } from "../features/userSlice";
+import { useState } from "react";
+
+// Create a custom theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#1976d2",
+    },
+    background: {
+      default: "#f5f5f5",
+    },
+  },
+});
 
 export default function Login() {
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,6 +46,7 @@ export default function Login() {
       const user = userData?.users[0];
 
       if (!user) {
+        setError("User not found.");
         throw new Error("User not found.");
       }
 
@@ -37,30 +61,73 @@ export default function Login() {
       }
 
       const userDetails = await detailsResponse.json();
-      console.log(userDetails)
+      console.log(userDetails);
 
       dispatch(login(userDetails));
     } catch (error) {
-      console.error(error.message);
+      setError(error.message);
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={2} sx={{ padding: 4 }}>
-        <Box component="form" onSubmit={handleLogin}>
-          <TextField
-            name="username"
-            placeholder="Username"
-            required
-            autoFocus
-            fullWidth
-          />
-          <Button type="submit" fullWidth>
-            Sign In
-          </Button>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Paper
+            elevation={3}
+            sx={{
+              mt: 8,
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              borderRadius: 2,
+            }}
+          >
+            <Typography
+              component="h1"
+              variant="h5"
+              color="primary"
+              gutterBottom
+            >
+              Sign In
+            </Typography>
+            {error && (
+              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                {error}
+              </Typography>
+            )}
+            <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                variant="outlined"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+            </Box>
+          </Paper>
         </Box>
-      </Paper>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 }
