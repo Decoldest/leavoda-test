@@ -11,7 +11,7 @@ A simple React web application for Leavoda interview test. This application fetc
 Clone the project
 
 ```bash
-  git clone (https://github.com/Decoldest/leavoda-test.git)
+  git clone https://github.com/Decoldest/leavoda-test.git
 ```
 
 Go to the project directory
