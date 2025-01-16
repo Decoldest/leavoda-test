@@ -1,124 +1,181 @@
-import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../features/userSlice";
 import {
   Container,
   Paper,
-  TextField,
-  Button,
-  Box,
   Typography,
+  Button,
+  Avatar,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
   ThemeProvider,
   createTheme,
-  CssBaseline,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { login } from "../features/userSlice";
+import Grid from "@mui/material/Grid2";
+import {
+  Person,
+  Home,
+  Business,
+  Phone,
+  Email,
+  Cake,
+  Work,
+} from "@mui/icons-material";
 
 // Create a custom theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: "#1976d2",
     },
     background: {
-      default: '#f5f5f5',
+      default: "#f5f5f5",
     },
   },
 });
 
-export default function Login() {
+export default function Dashboard() {
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  const handleLogin = async (e) => {
+  const {
+    firstName,
+    lastName,
+    image,
+    gender,
+    address,
+    age,
+    company,
+    email,
+    phone,
+  } = user;
+
+  const handleLogout = (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
-
-    try {
-      // Log in user by username
-      const userResponse = await fetch(
-        `https://dummyjson.com/users/filter?key=username&value=${username}`,
-      );
-
-      if (!userResponse.ok) {
-        throw new Error(`Error: ${userResponse.status}`);
-      }
-
-      const userData = await userResponse.json();
-      const user = userData?.users[0];
-
-      if (!user) {
-        throw new Error("User not found.");
-      }
-
-      //Fetch user data by id
-      const detailsResponse = await fetch(
-        `https://dummyjson.com/users/${user.id}`,
-      );
-      if (!detailsResponse.ok) {
-        throw new Error(
-          `Error fetching user details: ${detailsResponse.status}`,
-        );
-      }
-
-      const userDetails = await detailsResponse.json();
-      console.log(userDetails);
-
-      dispatch(login(userDetails));
-    } catch (error) {
-      console.error(error.message);
-    }
+    dispatch(logout());
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              mt: 8, 
-              p: 4, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-          >
-            <Typography component="h1" variant="h5" color="primary" gutterBottom>
-              Sign In
-            </Typography>
-            <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-                variant="outlined"
+      <Container maxWidth="md">
+        <Paper elevation={3} sx={{ p: 3, mt: 4 }}>
+          <Grid container spacing={15}>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                src={image}
+                alt="Profile Photo"
+                sx={{ width: 150, height: 150, mb: 2 }}
               />
+              <Typography variant="h5" gutterBottom>
+                {firstName} {lastName}
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {gender}
+              </Typography>
               <Button
-                type="submit"
-                fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                onClick={handleLogout}
+                sx={{ mt: 2 }}
               >
-                Sign In
+                Logout
               </Button>
-            </Box>
-          </Paper>
-        </Box>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Typography variant="h6" gutterBottom>
+                Personal Information
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Home />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Address"
+                    secondary={`${address.address}, ${address.city}, ${address.stateCode} ${address.postalCode}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Cake />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Age" secondary={age} />
+                </ListItem>
+              </List>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="h6" gutterBottom>
+                Employer Information
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Business />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Company" secondary={company.name} />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Work />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Department"
+                    secondary={company.department}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Person />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Title" secondary={company.title} />
+                </ListItem>
+              </List>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="h6" gutterBottom>
+                Contact Information
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Phone />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Phone" secondary={phone} />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Email />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Email" secondary={email} />
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
+        </Paper>
       </Container>
     </ThemeProvider>
   );
 }
-
