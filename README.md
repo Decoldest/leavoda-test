@@ -1,8 +1,42 @@
-# React + Vite
+# Leavoda
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React web application for Leavoda interview test. This application fetches dummy data with the [DummyJSON API](https://dummyjson.com) to display an employee's information.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+Go to the project directory
+
+```bash
+  cd leavoda-test
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run start
+```
+
+
+# Sources
+
+[Daniel Onugha on Dev.to](https://dev.to/danielonugha0/building-a-login-system-using-redux-5ce3)
+
+[Monsterlessons Academy on YouTube](https://www.youtube.com/watch?v=yVT7LLGGr00)
+
+
