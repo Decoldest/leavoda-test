@@ -1,5 +1,6 @@
 import { Container, Paper, TextField, Button, Box } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { login } from "../features/userSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -7,16 +8,38 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
-    const url = `https://dummyjson.com/users/filter?key=username&value=${username}`;
+
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+      // Log in user by username
+      const userResponse = await fetch(
+        `https://dummyjson.com/users/filter?key=username&value=${username}`,
+      );
+
+      if (!userResponse.ok) {
+        throw new Error(`Error: ${userResponse.status}`);
       }
 
-      const userData = await response.json();
-      console.log(userData);
-      dispatch(userData?.users[0]);
+      const userData = await userResponse.json();
+      const user = userData?.users[0];
+
+      if (!user) {
+        throw new Error("User not found.");
+      }
+
+      //Fetch user data by id
+      const detailsResponse = await fetch(
+        `https://dummyjson.com/users/${user.id}`,
+      );
+      if (!detailsResponse.ok) {
+        throw new Error(
+          `Error fetching user details: ${detailsResponse.status}`,
+        );
+      }
+
+      const userDetails = await detailsResponse.json();
+      console.log(userDetails)
+
+      dispatch(login(userDetails));
     } catch (error) {
       console.error(error.message);
     }
