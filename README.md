@@ -1,4 +1,4 @@
-# Leavoda
+# Leavoda Test
 
 A simple React web application for Leavoda interview test. This application fetches dummy data with the [DummyJSON API](https://dummyjson.com) to display an employee's information.
 
@@ -11,7 +11,7 @@ A simple React web application for Leavoda interview test. This application fetc
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone (https://github.com/Decoldest/leavoda-test.git)
 ```
 
 Go to the project directory
